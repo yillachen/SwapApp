@@ -7,10 +7,10 @@
 
 CREATE TABLE "Customer" (
     "CustomerID" int   NOT NULL,
-    "FirstName" string   NOT NULL,
-    "LastName" string   NOT NULL,
+    "FirstName" text   NOT NULL,
+    "LastName" text   NOT NULL,
     "AddressID" int   NOT NULL,
-    "Email" string   NOT NULL,
+    "Email" text   NOT NULL,
     "Phone" int   NULL,
     CONSTRAINT "pk_Customer" PRIMARY KEY (
         "CustomerID"
@@ -19,14 +19,14 @@ CREATE TABLE "Customer" (
 
 CREATE TABLE "Address" (
     "AddressID" int   NOT NULL,
-    "Address1" string   NOT NULL,
-    "Address2" string   NULL,
-    "Address3" string   NULL,
-    "City" string   NOT NULL,
-    "State" string   NOT NULL,
+    "Address1" text   NOT NULL,
+    "Address2" text   NULL,
+    "Address3" text   NULL,
+    "City" text   NOT NULL,
+    "State" text   NOT NULL,
     "Zip" int   NOT NULL,
-    "Country" string   NOT NULL,
-    "Type" string   NOT NULL,
+    "Country" text   NOT NULL,
+    "Type" text   NOT NULL,
     CONSTRAINT "pk_Address" PRIMARY KEY (
         "AddressID"
      )
@@ -35,13 +35,13 @@ CREATE TABLE "Address" (
 CREATE TABLE "ChatGroup" (
     "ChatID" int   NOT NULL,
     "CustomerID" int   NOT NULL,
-    "JoinDateTime" string   NOT NULL,
-    "LeftDateTime" string   NOT NULL
+    "JoinDateTime" text   NOT NULL,
+    "LeftDateTime" text   NOT NULL
 );
 
 CREATE TABLE "Chat" (
     "ChatID" int   NOT NULL,
-    "Name" string   NULL,
+    "Name" text   NULL,
     CONSTRAINT "pk_Chat" PRIMARY KEY (
         "ChatID"
      )
@@ -50,8 +50,8 @@ CREATE TABLE "Chat" (
 CREATE TABLE "Message" (
     "MessageID" int   NOT NULL,
     "ChatID" int   NOT NULL,
-    "Content" string   NOT NULL,
-    "SentDateTime" string   NOT NULL,
+    "Content" text   NOT NULL,
+    "SentDateTime" text   NOT NULL,
     CONSTRAINT "pk_Message" PRIMARY KEY (
         "MessageID"
      )
@@ -59,10 +59,10 @@ CREATE TABLE "Message" (
 
 CREATE TABLE "Product" (
     "ProductID" int   NOT NULL,
-    "Name" string   NOT NULL,
+    "Name" text   NOT NULL,
     "Description" varchar(2000)   NULL,
-    "Condition" string   NOT NULL,
-    "CategoryID" string   NULL,
+    "Condition" text   NOT NULL,
+    "CategoryID" text   NULL,
     "CustomerID" int   NOT NULL,
     "Quantity" int   NOT NULL,
     CONSTRAINT "pk_Product" PRIMARY KEY (
@@ -72,7 +72,7 @@ CREATE TABLE "Product" (
 
 CREATE TABLE "Category" (
     "CategoryID" int   NOT NULL,
-    "Name" string   NOT NULL,
+    "Name" text   NOT NULL,
     CONSTRAINT "pk_Category" PRIMARY KEY (
         "CategoryID"
      )
@@ -80,7 +80,7 @@ CREATE TABLE "Category" (
 
 CREATE TABLE "Swap" (
     "SwapID" int   NOT NULL,
-    "SwapDate" string   NOT NULL,
+    "SwapDate" text   NOT NULL,
     CONSTRAINT "pk_Swap" PRIMARY KEY (
         "SwapID"
      )
@@ -89,7 +89,7 @@ CREATE TABLE "Swap" (
 CREATE TABLE "SwapItem" (
     "SwapID" int   NOT NULL,
     "ProductID" int   NOT NULL,
-    "Status" string   NOT NULL
+    "Status" text   NOT NULL
 );
 
 ALTER TABLE "Customer" ADD CONSTRAINT "fk_Customer_AddressID" FOREIGN KEY("AddressID")

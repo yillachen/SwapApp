@@ -11,7 +11,7 @@ module.exports = db.define('customer', {
       notEmpty: false
     }
   },
-  lasttName: {
+  lastName: {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
@@ -29,7 +29,7 @@ module.exports = db.define('customer', {
     type: Sequelize.STRING,
     allowNull: true,
     validate: {
-      validator: phoneValidationRegex.test(v)
+      validator: (v) => phoneValidationRegex.test(v)
     }
   },
   profilePhoto: {
