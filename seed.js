@@ -4,7 +4,7 @@ const { db, Product, Customer } = require('./server/db');
 
 const seed = async () => {
   try {
-    await db.sync({ force: true });
+    await db.sync({ force: true }); // wait for the database to connect.
 
     const customers = await Promise.all([
       Customer.create({
