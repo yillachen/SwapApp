@@ -5,11 +5,13 @@
 
 CREATE TABLE "Customer" (
     "CustomerID" int   NOT NULL,
+    "Username" string   NOT NULL,
     "FirstName" string   NOT NULL,
     "LastName" string   NOT NULL,
     "AddressID" int   NOT NULL,
     "Email" string   NOT NULL,
     "Phone" int   NULL,
+    "ProfilePhoto" text   NULL,
     CONSTRAINT "pk_Customer" PRIMARY KEY (
         "CustomerID"
      )
@@ -30,15 +32,11 @@ CREATE TABLE "Address" (
      )
 );
 
-CREATE TABLE "ChatGroup" (
-    "ChatID" int   NOT NULL,
-    "CustomerID" int   NOT NULL,
-    "JoinDateTime" string   NOT NULL,
-    "LeftDateTime" string   NOT NULL
-);
-
+-- initially added timestamps
+-- postgresql has native timestamps on creation
 CREATE TABLE "Chat" (
     "ChatID" int   NOT NULL,
+    "CustomerID" int   NOT NULL,
     "Name" string   NULL,
     CONSTRAINT "pk_Chat" PRIMARY KEY (
         "ChatID"
@@ -49,7 +47,6 @@ CREATE TABLE "Message" (
     "MessageID" int   NOT NULL,
     "ChatID" int   NOT NULL,
     "Content" string   NOT NULL,
-    "SentDateTime" string   NOT NULL,
     CONSTRAINT "pk_Message" PRIMARY KEY (
         "MessageID"
      )
@@ -63,6 +60,7 @@ CREATE TABLE "Product" (
     "CategoryID" string   NULL,
     "CustomerID" int   NOT NULL,
     "Quantity" int   NOT NULL,
+    "Live" boolean   NOT NULL,
     CONSTRAINT "pk_Product" PRIMARY KEY (
         "ProductID"
      )
@@ -79,24 +77,26 @@ CREATE TABLE "Category" (
 CREATE TABLE "Swap" (
     "SwapID" int   NOT NULL,
     "SwapDate" string   NOT NULL,
+    "CompletionDate" string   NOT NULL,
     CONSTRAINT "pk_Swap" PRIMARY KEY (
         "SwapID"
      )
 );
 
-CREATE TABLE "SwapItem" (
+CREATE TABLE "LineItem" (
+    "LineItemID" int   NOT NULL,
     "SwapID" int   NOT NULL,
     "ProductID" int   NOT NULL,
-    "Status" string   NOT NULL
+    "Status" string   NOT NULL,
+    CONSTRAINT "pk_LineItem" PRIMARY KEY (
+        "LineItemID"
+     )
 );
 
 ALTER TABLE "Customer" ADD CONSTRAINT "fk_Customer_AddressID" FOREIGN KEY("AddressID")
 REFERENCES "Address" ("AddressID");
 
-ALTER TABLE "ChatGroup" ADD CONSTRAINT "fk_ChatGroup_ChatID" FOREIGN KEY("ChatID")
-REFERENCES "Chat" ("ChatID");
-
-ALTER TABLE "ChatGroup" ADD CONSTRAINT "fk_ChatGroup_CustomerID" FOREIGN KEY("CustomerID")
+ALTER TABLE "Chat" ADD CONSTRAINT "fk_Chat_CustomerID" FOREIGN KEY("CustomerID")
 REFERENCES "Customer" ("CustomerID");
 
 ALTER TABLE "Message" ADD CONSTRAINT "fk_Message_ChatID" FOREIGN KEY("ChatID")
@@ -108,9 +108,9 @@ REFERENCES "Category" ("CategoryID");
 ALTER TABLE "Product" ADD CONSTRAINT "fk_Product_CustomerID" FOREIGN KEY("CustomerID")
 REFERENCES "Customer" ("CustomerID");
 
-ALTER TABLE "SwapItem" ADD CONSTRAINT "fk_SwapItem_SwapID" FOREIGN KEY("SwapID")
+ALTER TABLE "LineItem" ADD CONSTRAINT "fk_LineItem_SwapID" FOREIGN KEY("SwapID")
 REFERENCES "Swap" ("SwapID");
 
-ALTER TABLE "SwapItem" ADD CONSTRAINT "fk_SwapItem_ProductID" FOREIGN KEY("ProductID")
+ALTER TABLE "LineItem" ADD CONSTRAINT "fk_LineItem_ProductID" FOREIGN KEY("ProductID")
 REFERENCES "Product" ("ProductID");
 
