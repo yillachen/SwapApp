@@ -8,6 +8,7 @@ const seed = async () => {
 
     const customers = await Promise.all([
       Customer.create({
+        username: 'dabernathy',
         firstName: 'Dolores',
         lastName: 'Abernathy',
         email: 'doloresabernathy@westworld.com',
@@ -16,6 +17,7 @@ const seed = async () => {
         'https://quotecatalog.imgix.net/assets/asset-BpymUWoXcLy2amD8tqYtOC4a/original.jpg',
       }),
       Customer.create({
+        username: 'maevemillay',
         firstName: 'Maeve',
         lastName: 'Millay',
         email: 'maevemillay@westworld.com',
@@ -24,6 +26,7 @@ const seed = async () => {
         'https://static.wikia.nocookie.net/westworld/images/7/78/Maeves1.jpeg',
       }),
       Customer.create({
+        username: 'lowe.bernard',
         firstName: 'Bernard',
         lastName: 'Lowe',
         email: 'bernardlowe@westworld.com',
@@ -32,6 +35,7 @@ const seed = async () => {
         'https://static.wikia.nocookie.net/westworld/images/6/65/Bernard_infobox_new1.jpg',
       }),
       Customer.create({
+        username: 'clempennyfeather',
         firstName: 'Clementine',
         lastName: 'Pennyfeather',
         email: 'ClementinePennyfeather@westworld.com',
@@ -40,6 +44,7 @@ const seed = async () => {
         phone: null
       }),
       Customer.create({
+        username: 'tedflood',
         firstName: 'Teddy',
         lastName: 'Flood',
         email: 'TeddyFlood@westworld.com',
@@ -48,12 +53,14 @@ const seed = async () => {
         phone: null
       }),
       Customer.create({
+        username: 'escaton',
         firstName: 'Hector',
         lastName: 'Escaton',
         email: 'HectorEscaton@westworld.com',
         phone: null
       }),
       Customer.create({
+        username: 'hx',
         firstName: 'Hanaryo',
         lastName: 'X',
         email: 'HanaryoX@westworld.com',
@@ -104,14 +111,14 @@ const seed = async () => {
     const [dolores, maeve, bernard, clementine, teddy, hector, hanaryo] = customers;
     const [hpPrinter, woolBlanket, ceramicTeapot, ivoryDish, kintsugiBowl] = products;
 
-    await dolores.addProduct([hpPrinter]);
+    await dolores.addProduct([hpPrinter]); // sequelize magic methods
     await maeve.addProduct([woolBlanket]);
     await clementine.addProduct([ceramicTeapot]);
     await teddy.addProduct([ivoryDish]);
     await hanaryo.addProduct([kintsugiBowl]);
 
   } catch (err) {
-    console.log(red(err));
+    console.log(red('Error in seed async fn >> ',err));
   }
 };
 

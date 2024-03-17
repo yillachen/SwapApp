@@ -1,9 +1,14 @@
 const Sequelize = require('sequelize');
-const db = require('./database');
+const db = require('../database');
 
 const phoneValidationRegex = /\d{3}-\d{3}-\d{4}/
 
 module.exports = db.define('customer', {
+  username: {
+    type: Sequelize.STRING(64),
+    allowNull: false,
+    unique: true
+  },
   firstName: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -22,7 +27,8 @@ module.exports = db.define('customer', {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: false
+      notEmpty: false,
+      isEmail: true
     }
   },
   phone: {
@@ -33,6 +39,9 @@ module.exports = db.define('customer', {
     }
   },
   profilePhoto: {
-    type: Sequelize.TEXT
+    type: Sequelize.TEXT,
+    validate: {
+      isUrl: true
+    }
   }
 })
