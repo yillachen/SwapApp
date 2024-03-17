@@ -4,8 +4,15 @@ const { db, Product, Customer, Chat, Message } = require('./server/db');
 const axios = require('axios'); // can also use faker or casual libs to reduce network api calls
 
 const seed = async () => {
+  // randomizer fn that picks a number from # of items in array.
+  const randomPick = array => Math.floor(Math.random() * array.length);
+
   try {
-    await db.sync({ force: true }); // wait for the database to connect.
+    // wait for the database to connect.
+    await db.sync({ force: true });
+
+    // for Product model, to set required attribute `condition`
+    const conditionMap = ['fair', 'good', 'excellent'];
 
     const fetchFakeData = async (type) => {
       let url = '';
@@ -24,13 +31,6 @@ const seed = async () => {
       const response = await axios.get(url);
       return response.data;
     }
-
-    const fakeMessages = await fetchFakeData('message');
-    // console.log({ fakeMessages })
-
-    const conditionMap = ['fair', 'good', 'excellent']; // for Product model, to set required attribute `condition`
-
-    const randomPick = array => Math.floor(Math.random() * array.length); // randomizer fn that picks a number from # of items in array.
 
     // creates customers in db; moved customers to function scope since it's being used only once during creation.
     const createCustomers = async () => {
@@ -102,6 +102,16 @@ const seed = async () => {
       return customers;
     }
 
+    // create random chats in db
+    const createChats = async () => {
+      const chatData = [{ name: null }, { name: 'Group Chat #1' }, { name: 'Group Chat #3' }];
+      const chats = await Promise.all(chatData.map(data => Chat.create(data)));
+      return chats;
+    }
+
+    const fakeMessages = await fetchFakeData('message');
+    // console.log({ fakeMessages })
+
     let randomProducts = await fetchFakeData('product');
     const productsMax = 20;
     randomProducts = randomProducts.slice(0, productsMax);
@@ -120,20 +130,7 @@ const seed = async () => {
       });
     }));
 
-    // const messages = await Promise.all(fakeMessages.map(msg => {
-    //   const { text } = msg;
-    //   return Message.create({
-    //     content: text
-    //   })
-    // }))
-
-    // create random chats in db
-    const createChats = async () => {
-      const chatData = [{ name: null }, { name: 'Group Chat #1' }, { name: 'Group Chat #3' }];
-      const chats = await Promise.all(chatData.map(data => Chat.create(data)));
-      return chats;
-    }
-
+    const customers = await createCustomers();
     const chats = await createChats();
 
     // assign random product to random customer
@@ -141,15 +138,25 @@ const seed = async () => {
       await customer.addProduct(products[randomPick(products)])
     }
 
+    const assignRandomChat = async customer => {
+      await customer.addChat(chats[randomPick(chats)]);
+    }
+
+    await Promise.all(customers.map(assignRandomProduct));
+    await Promise.all(customers.map(assignRandomChat));
+
+    // need to look into sequelize magic methods to assign chats to customers https://gist.github.com/yillachen/9ec5a97e96b3f57e7bcd759b2032fe78
+
+    // const messages = await Promise.all(fakeMessages.map(msg => {
+    //   const { text } = msg;
+    //   return Message.create({
+    //     content: text
+    //   })
+    // }))
+
     // const assignRandomMessage = async customer => {
     //   await chat.addMessage(messages[randomPick(messages)])
     // }
-
-    const customers = await createCustomers();
-
-    await Promise.all(customers.map(assignRandomProduct));
-    await Promise.all(customers.map(customer => customer.addChat(chats[randomPick(chats)])))
-    // need to look into sequelize magic methods to assign chats to customers https://gist.github.com/yillachen/9ec5a97e96b3f57e7bcd759b2032fe78
 
     // await Promise.all(chats.map(assignRandomChat))
 
