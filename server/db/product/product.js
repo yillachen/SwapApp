@@ -15,6 +15,7 @@ module.exports = db.define('product', {
   condition: {
     type: Sequelize.ENUM,
     values: ['fair', 'good', 'excellent'],
+    defaultValue: 'good',
     allowNull: false,
     validate: {
       notEmpty: false
@@ -22,7 +23,8 @@ module.exports = db.define('product', {
   },
   quantity: {
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: false,
+    defaultValue: 1
   },
   live: { // live item or draft
     type: Sequelize.BOOLEAN,

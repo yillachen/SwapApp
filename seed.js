@@ -1,124 +1,123 @@
 const { green, red } = require('chalk');
 const { Sequelize } = require('sequelize');
 const { db, Product, Customer } = require('./server/db');
+const axios = require('axios');
 
 const seed = async () => {
   try {
     await db.sync({ force: true }); // wait for the database to connect.
 
-    const customers = await Promise.all([
-      Customer.create({
-        username: 'dabernathy',
-        firstName: 'Dolores',
-        lastName: 'Abernathy',
-        email: 'doloresabernathy@westworld.com',
-        phone: null,
-        profilePhoto:
-        'https://quotecatalog.imgix.net/assets/asset-BpymUWoXcLy2amD8tqYtOC4a/original.jpg',
-      }),
-      Customer.create({
-        username: 'maevemillay',
-        firstName: 'Maeve',
-        lastName: 'Millay',
-        email: 'maevemillay@westworld.com',
-        phone: null,
-        profilePhoto:
-        'https://static.wikia.nocookie.net/westworld/images/7/78/Maeves1.jpeg',
-      }),
-      Customer.create({
-        username: 'lowe.bernard',
-        firstName: 'Bernard',
-        lastName: 'Lowe',
-        email: 'bernardlowe@westworld.com',
-        phone: null,
-        profilePhoto:
-        'https://static.wikia.nocookie.net/westworld/images/6/65/Bernard_infobox_new1.jpg',
-      }),
-      Customer.create({
-        username: 'clempennyfeather',
-        firstName: 'Clementine',
-        lastName: 'Pennyfeather',
-        email: 'ClementinePennyfeather@westworld.com',
-        profilePhoto:
-        'https://static.wikia.nocookie.net/westworld/images/5/55/Clementine_Passed_Pawn.jpg',
-        phone: null
-      }),
-      Customer.create({
-        username: 'tedflood',
-        firstName: 'Teddy',
-        lastName: 'Flood',
-        email: 'TeddyFlood@westworld.com',
-        profilePhoto:
-        'https://static.wikia.nocookie.net/westworld/images/a/a9/Teddy_Flood_Phase_Space.jpg',
-        phone: null
-      }),
-      Customer.create({
-        username: 'escaton',
-        firstName: 'Hector',
-        lastName: 'Escaton',
-        email: 'HectorEscaton@westworld.com',
-        phone: null
-      }),
-      Customer.create({
-        username: 'hx',
-        firstName: 'Hanaryo',
-        lastName: 'X',
-        email: 'HanaryoX@westworld.com',
-        phone: null,
-        profilePhoto:
-        'https://static.wikia.nocookie.net/westworld/images/7/76/Hanaryo_Akane_No_Mai.jpg',
-      }),
-    ]);
+    const fetchFakeProducts = async () => {
+      try {
+        const response = await axios.get('https://fakestoreapi.com/products');
+        return response.data;
+      } catch (error) {
+        throw new Error(red(error))
+      }
+    }
 
-    const products = await Promise.all([
-      Product.create({
-        name: 'HP Printer',
-        description: 'Count on OfficeJet Pro, named the most reliable printer brand in its category by leading industry experts.',
-        live: true,
-        quantity: 6,
-        condition: 'fair'
-      }),
-      Product.create({
-        name: 'Wool Blanket',
-        description: null,
-        live: true,
-        quantity: 8,
-        condition: 'good'
-      }),
-      Product.create({
-        name: 'Ceramic Teapot',
-        description: null,
-        live: true,
-          quantity: 7,
-        condition: 'excellent'
-      }),
-      Product.create({
-        name: 'Ivory Dish',
-        description: null,
-        live: true,
-        quantity: 3,
-        condition: 'excellent'
-      }),
-      Product.create({
-        name: 'Kintsugi Bowl',
-        description: null,
-        live: true,
-        quantity: 9,
-        condition: 'good'
-      })
-    ]);
+    const conditionMap = ['fair', 'good', 'excellent']; // for Product model, to set required attribute `condition`
 
-    const [dolores, maeve, bernard, clementine, teddy, hector, hanaryo] = customers;
-    const [hpPrinter, woolBlanket, ceramicTeapot, ivoryDish, kintsugiBowl] = products;
+    const randomPick = array => Math.floor(Math.random() * array.length); // randomizer fn that picks a number from # of items in array.
 
-    await dolores.addProduct([hpPrinter]); // sequelize magic methods
-    await maeve.addProduct([woolBlanket]);
-    await clementine.addProduct([ceramicTeapot]);
-    await teddy.addProduct([ivoryDish]);
-    await hanaryo.addProduct([kintsugiBowl]);
+    // creates customers in db
+    const createCustomers = async () => {
+      const customersData = [
+        {
+          username: 'dabernathy',
+          firstName: 'Dolores',
+          lastName: 'Abernathy',
+          email: 'doloresabernathy@westworld.com',
+          phone: null,
+          profilePhoto:
+            'https://quotecatalog.imgix.net/assets/asset-BpymUWoXcLy2amD8tqYtOC4a/original.jpg',
+        },
+        {
+          username: 'maevemillay',
+          firstName: 'Maeve',
+          lastName: 'Millay',
+          email: 'maevemillay@westworld.com',
+          phone: null,
+          profilePhoto:
+            'https://static.wikia.nocookie.net/westworld/images/7/78/Maeves1.jpeg',
+        },
+        {
+          username: 'lowe.bernard',
+          firstName: 'Bernard',
+          lastName: 'Lowe',
+          email: 'bernardlowe@westworld.com',
+          phone: null,
+          profilePhoto:
+            'https://static.wikia.nocookie.net/westworld/images/6/65/Bernard_infobox_new1.jpg',
+        },
+        {
+          username: 'clempennyfeather',
+          firstName: 'Clementine',
+          lastName: 'Pennyfeather',
+          email: 'ClementinePennyfeather@westworld.com',
+          profilePhoto:
+            'https://static.wikia.nocookie.net/westworld/images/5/55/Clementine_Passed_Pawn.jpg',
+          phone: null
+        },
+        {
+          username: 'tedflood',
+          firstName: 'Teddy',
+          lastName: 'Flood',
+          email: 'TeddyFlood@westworld.com',
+          profilePhoto:
+            'https://static.wikia.nocookie.net/westworld/images/a/a9/Teddy_Flood_Phase_Space.jpg',
+          phone: null
+        },
+        {
+          username: 'escaton',
+          firstName: 'Hector',
+          lastName: 'Escaton',
+          email: 'HectorEscaton@westworld.com',
+          phone: null
+        },
+        {
+          username: 'hanaryo',
+          firstName: 'Hanaryo',
+          lastName: 'X',
+          email: 'HanaryoX@westworld.com',
+          phone: null,
+          profilePhoto:
+            'https://static.wikia.nocookie.net/westworld/images/7/76/Hanaryo_Akane_No_Mai.jpg',
+        }
+      ];
+
+      const customers = await Promise.all(customersData.map(data => Customer.create(data)));
+      return customers;
+    }
+
+    let randomProducts = await fetchFakeProducts();
+    const productsMax = 20;
+    randomProducts = randomProducts.slice(0, productsMax);
+
+    // creates products in db
+    const products = await Promise.all(randomProducts.map(product => {
+      const { title, description, category, image } = product;
+      return Product.create({
+        name: title,
+        description,
+        condition: conditionMap[randomPick(conditionMap)] || 'good',
+        quantity: 1,
+        live: true,
+        image,
+        category
+      });
+    }));
+
+    // assign random product to random customer
+    const assignRandomProduct = async customer => {
+      await customer.addProduct(products[randomPick(products)])
+    }
+
+    const customers = await createCustomers();
+    await Promise.all(customers.map(assignRandomProduct));
 
   } catch (err) {
-    console.log(red('Error in seed async fn >> ',err));
+    console.error(red('Error in Seed Async FN >> ', err));
   }
 };
 
@@ -133,7 +132,7 @@ if (require.main === module) {
       db.close();
     })
     .catch((err) => {
-      console.error(red('Oh noes! Something went wrong!'));
+      console.error(red('Error during seeding'));
       console.error(err);
       db.close();
     });
