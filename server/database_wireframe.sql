@@ -83,13 +83,13 @@ CREATE TABLE "Swap" (
      )
 );
 
-CREATE TABLE "SwapItem" (
-    "SwapItemID" int   NOT NULL,
+CREATE TABLE "LineItem" (
+    "LineItemID" int   NOT NULL,
     "SwapID" int   NOT NULL,
     "ProductID" int   NOT NULL,
     "Status" string   NOT NULL,
-    CONSTRAINT "pk_SwapItem" PRIMARY KEY (
-        "SwapItemID"
+    CONSTRAINT "pk_LineItem" PRIMARY KEY (
+        "LineItemID"
      )
 );
 
@@ -108,9 +108,9 @@ REFERENCES "Category" ("CategoryID");
 ALTER TABLE "Product" ADD CONSTRAINT "fk_Product_CustomerID" FOREIGN KEY("CustomerID")
 REFERENCES "Customer" ("CustomerID");
 
-ALTER TABLE "SwapItem" ADD CONSTRAINT "fk_SwapItem_SwapID" FOREIGN KEY("SwapID")
+ALTER TABLE "LineItem" ADD CONSTRAINT "fk_LineItem_SwapID" FOREIGN KEY("SwapID")
 REFERENCES "Swap" ("SwapID");
 
-ALTER TABLE "SwapItem" ADD CONSTRAINT "fk_SwapItem_ProductID" FOREIGN KEY("ProductID")
+ALTER TABLE "LineItem" ADD CONSTRAINT "fk_LineItem_ProductID" FOREIGN KEY("ProductID")
 REFERENCES "Product" ("ProductID");
 
