@@ -34,17 +34,9 @@ CREATE TABLE "Address" (
 
 -- initially added timestamps
 -- postgresql has native timestamps on creation
-CREATE TABLE "ChatGroup" (
-    "ChatGroupID" int   NOT NULL,
-    "ChatID" int   NOT NULL,
-    "CustomerID" int   NOT NULL,
-    CONSTRAINT "pk_ChatGroup" PRIMARY KEY (
-        "ChatGroupID"
-     )
-);
-
 CREATE TABLE "Chat" (
     "ChatID" int   NOT NULL,
+    "CustomerID" int   NOT NULL,
     "Name" string   NULL,
     CONSTRAINT "pk_Chat" PRIMARY KEY (
         "ChatID"
@@ -104,10 +96,7 @@ CREATE TABLE "SwapItem" (
 ALTER TABLE "Customer" ADD CONSTRAINT "fk_Customer_AddressID" FOREIGN KEY("AddressID")
 REFERENCES "Address" ("AddressID");
 
-ALTER TABLE "ChatGroup" ADD CONSTRAINT "fk_ChatGroup_ChatID" FOREIGN KEY("ChatID")
-REFERENCES "Chat" ("ChatID");
-
-ALTER TABLE "ChatGroup" ADD CONSTRAINT "fk_ChatGroup_CustomerID" FOREIGN KEY("CustomerID")
+ALTER TABLE "Chat" ADD CONSTRAINT "fk_Chat_CustomerID" FOREIGN KEY("CustomerID")
 REFERENCES "Customer" ("CustomerID");
 
 ALTER TABLE "Message" ADD CONSTRAINT "fk_Message_ChatID" FOREIGN KEY("ChatID")
