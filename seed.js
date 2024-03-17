@@ -1,7 +1,7 @@
 const { green, red } = require('chalk');
 const { Sequelize } = require('sequelize');
 const { db, Product, Customer } = require('./server/db');
-const axios = require('axios');
+const axios = require('axios'); // can also use faker or casual libs to reduce network api calls
 
 const seed = async () => {
   try {
