@@ -2,6 +2,7 @@ const db = require('./database');
 const Customer = require('./customer/customer');
 const Product = require('./product/product');
 const Swap = require('./swap/swap');
+const SwapItem = require('./swap/swapItem');
 const ChatGroup = require('./chat/chatGroup');
 const Chat = require('./chat/chat');
 const Message = require('./chat/message');
@@ -36,6 +37,9 @@ Swap.belongsToMany(Customer, {
   as: 'swaps'
 })
 
+Swap.hasMany(SwapItem);
+SwapItem.belongsTo(Swap);
+
 module.exports = {
-  db, Customer, Product, ChatGroup, Address, Swap
+  db, Customer, Product, ChatGroup, Address, Swap, SwapItem
 }

@@ -24,7 +24,7 @@ module.exports = db.define('product', {
     type: Sequelize.INTEGER,
     allowNull: false
   },
-  live: {
+  live: { // live item or draft
     type: Sequelize.BOOLEAN,
     allowNull: false
   },
